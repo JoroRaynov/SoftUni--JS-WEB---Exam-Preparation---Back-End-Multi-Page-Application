@@ -54,6 +54,7 @@ authController.post('/login', async (req, res) => {
     } catch (error) {
 //TODO check the requirement and change the error
         const errors = errorParser(error);
+        console.log(errors)
         res.render('user/login', {
             errors,
             body: req.body
