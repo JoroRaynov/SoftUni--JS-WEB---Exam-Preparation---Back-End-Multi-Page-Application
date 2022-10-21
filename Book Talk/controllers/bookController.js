@@ -5,7 +5,7 @@ const { isAuth, isGuest } = require('../middlewares/authMiddleware');
 
 
 bookController.get('/catalog', async (req, res) => {
-    const books = await bookService.getAllBooks().lean();
+    const books = await bookService.getAllBooks();
     res.render('catalog', { books });
 });
 
@@ -43,14 +43,14 @@ bookController.post('/create', isAuth, async (req, res) => {
 
 bookController.get('/:id/details', async (req, res) => {
     const book = await bookService.getById(true, req.params.id);
-    console.log(book);
+
     const isOwner = book.owner == req.user?._id;
     // const isWished = book.wished == req.user?._id;
     if (req.user) {
         const isWished = book.wishingList.map(b => b.toString()).includes(req.user._id.toString());
-      return  res.render('details', { book, isOwner, isWished });
+        return res.render('details', { book, isOwner, isWished });
     }
-    res.render('details', { book})
+    res.render('details', { book })
 
 });
 
@@ -64,7 +64,7 @@ bookController.get('/:id/wish', isAuth, async (req, res) => {
         if (isOwner) {
             throw new Error('The owner can\'t add his own book in wish list!');
         }
-        if(book.wishingList.map(b => b.toString()).includes(req.user._id.toString())) {
+        if (book.wishingList.map(b => b.toString()).includes(req.user._id.toString())) {
             throw new Error('You can\'t add twice in wish list!')
         }
 
@@ -74,9 +74,63 @@ bookController.get('/:id/wish', isAuth, async (req, res) => {
     } catch (error) {
         res.render('home', { errors: errorParser(error) });
     }
-
-
-
-
 });
+
+bookController.get('/:id/edit', isAuth, async (req, res) => {
+    const book = await bookService.getById(true, req.params.id);
+
+    if (book.owner == req.user._id) {
+        res.render('edit', { book })
+    }
+});
+
+bookController.post('/:id/edit', isAuth, async (req, res) => {
+    const book = await bookService.getById(true, req.params.id);
+
+    const edited = {
+        title: req.body.title,
+        author: req.body.author,
+        genre: req.body.genre,
+        stars: req.body.stars,
+        imageUrl: req.body.imageUrl,
+        bookReview: req.body.bookReview
+    }
+    try {
+        if (book.owner != req.user._id) {
+            throw new Error('Only the owner can edit this book');
+        }
+        if (Object.values(edited).some(k => !k)) {
+            throw new Error('All fields are required');
+        }
+        await bookService.update(book._id, edited);
+        res.redirect(`/book/${book._id}/details`);
+
+    } catch (error) {
+        res.render('edit', {
+            body: req.body,
+            errors: errorParser(error)
+        })
+    }
+});
+
+bookController.get('/:id/delete', isAuth, async (req, res) => {
+    const book = await bookService.getById(false, req.params.id);
+
+    try {
+        if (book.owner != req.user._id) {
+            throw new Error('Only the owner can edit this book');
+        }
+        await bookService.delete(book._id);
+        res.redirect('/book/catalog');
+    } catch (error) {
+        res.render('catalog', { errors: errorParser(error) });
+    }
+});
+
+
+
+
 module.exports = bookController;
+
+
+// Cast to ObjectId failed for value "{ id: new ObjectId("63525a69b2632f27c4b07c09") }" (type Object) at path "_id" for model "Book"

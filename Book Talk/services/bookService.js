@@ -1,7 +1,7 @@
 const Book = require('../models/Book');
 
 
-exports.getAllBooks = () => Book.find();
+exports.getAllBooks = () => Book.find().lean();
 
 exports.getById = (lean = true, id) => {
     if (lean == true) {
@@ -10,3 +10,18 @@ exports.getById = (lean = true, id) => {
     return Book.findById( id );
 };
 exports.create = (book) => Book.create(book);
+
+exports.update = async (id, book) => {
+    const existing = await Book.findById( id );
+
+    existing.title = book.title,
+    existing.author = book.author,
+    existing.genre = book.genre,
+    existing.stars = book.stars,
+    existing.imageUrl = book.imageUrl,
+    existing.bookReview = book.bookReview
+
+    await existing.save();
+}
+
+exports.delete = (id) => Book.findByIdAndDelete(id)
