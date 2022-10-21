@@ -5,6 +5,9 @@ const errorParser = require('../utils/errorParser');
 
 authController.get('/register', (req, res) => {
     //TODO replace register.view
+    if(req.user) {
+        return res.redirect('/')
+    }
     res.render('user/register');
 });
 
@@ -38,11 +41,14 @@ authController.post('/register', async (req, res) => {
 
 authController.get('/login', (req, res) => {
     //TODO replace register.view
-
+    if(req.user) {
+        return res.redirect('/')
+    }
     res.render('user/login');
 });
 
 authController.post('/login', async (req, res) => {
+       
     try {
         if (req.body.email == '' || req.body.password == '') {
             throw new Error('All fields are required');
@@ -64,8 +70,13 @@ authController.post('/login', async (req, res) => {
 });
 
 authController.get('/logout', (req, res) => {
-    res.clearCookie('session');
-    res.redirect('/');
+    if(req.user){
+        res.clearCookie('session');
+        res.redirect('/');
+    } else {
+        res.redirect('/');
+    }
+    
 });
 
 module.exports = authController;
