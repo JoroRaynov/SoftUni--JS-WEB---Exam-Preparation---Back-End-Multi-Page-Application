@@ -26,11 +26,11 @@
         <div class='header'>
             <nav class='navbar'>
                 <a href='/'>Home</a>
-                <a href='/catalog'>Catalog</a>
+                <a href='/book/catalog'>Catalog</a>
                 <!--Only for logged user-->
                 {{#if user}}
                 <a href='/profile'>Profile</a>
-                <a href='#'>Create Review</a>
+                <a href='/book/create'>Create Review</a>
                 <a href='/auth/logout'>Logout</a>
                 {{else}}
                 <!--Only for guest-->
@@ -41,6 +41,7 @@
         </div>
 
     </header>
+    
     {{{body}}}
 
 </body>
