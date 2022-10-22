@@ -1,11 +1,11 @@
 const authController = require('express').Router();
 const authService = require('../services/authService');
 const errorParser = require('../utils/errorParser');
-
+const { isAuth } = require('../middlewares/authMiddleware');
 
 authController.get('/register', (req, res) => {
     //TODO replace register.view
-    if(req.user) {
+    if (req.user) {
         return res.redirect('/')
     }
     res.render('user/register');
@@ -21,7 +21,7 @@ authController.post('/register', async (req, res) => {
         if (req.body.repass != req.body.password) {
             throw new Error('Passwords don\'t match')
         }
-        if(req.body.password.length < 3 ){
+        if (req.body.password.length < 3) {
             throw new Error('Password must be at least 3 characters long')
         }
         const token = await authService.register(req.body);
@@ -44,14 +44,14 @@ authController.post('/register', async (req, res) => {
 
 authController.get('/login', (req, res) => {
     //TODO replace register.view
-    if(req.user) {
+    if (req.user) {
         return res.redirect('/')
     }
     res.render('user/login');
 });
 
 authController.post('/login', async (req, res) => {
-       
+
     try {
         if (req.body.email == '' || req.body.password == '') {
             throw new Error('All fields are required');
@@ -61,7 +61,7 @@ authController.post('/login', async (req, res) => {
         res.redirect('/');
 
     } catch (error) {
-//TODO check the requirement and change the error
+        //TODO check the requirement and change the error
         const errors = errorParser(error);
         console.log(errors)
         res.render('user/login', {
@@ -73,13 +73,22 @@ authController.post('/login', async (req, res) => {
 });
 
 authController.get('/logout', (req, res) => {
-    if(req.user){
+    if (req.user) {
         res.clearCookie('session');
         res.redirect('/');
     } else {
         res.redirect('/');
     }
-    
+
+});
+
+authController.get('/profile', isAuth, async (req, res) => {
+    const user = await authService.getUserById(req.user._id);
+    console.log(user.wishList);
+    res.render('user/profile', {
+        email: user.email,
+        books: user.wishList
+    })
 });
 
 module.exports = authController;

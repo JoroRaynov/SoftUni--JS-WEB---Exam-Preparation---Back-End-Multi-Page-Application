@@ -2,7 +2,7 @@ const bookController = require('express').Router();
 const bookService = require('../services/bookService');
 const errorParser = require('../utils/errorParser');
 const { isAuth, isGuest } = require('../middlewares/authMiddleware');
-
+const authService = require('../services/authService');
 
 bookController.get('/catalog', async (req, res) => {
     const books = await bookService.getAllBooks();
@@ -67,6 +67,7 @@ bookController.get('/:id/wish', isAuth, async (req, res) => {
         if (book.wishingList.map(b => b.toString()).includes(req.user._id.toString())) {
             throw new Error('You can\'t add twice in wish list!')
         }
+        authService.wishBook(req.user._id, req.params.id);
 
         book.wishingList.push(req.user._id);
         await book.save();
@@ -78,7 +79,6 @@ bookController.get('/:id/wish', isAuth, async (req, res) => {
 
 bookController.get('/:id/edit', isAuth, async (req, res) => {
     const book = await bookService.getById(true, req.params.id);
-
     try {
         if (book.owner != req.user._id) {
             throw new Error('Only the owner can edit this book');
