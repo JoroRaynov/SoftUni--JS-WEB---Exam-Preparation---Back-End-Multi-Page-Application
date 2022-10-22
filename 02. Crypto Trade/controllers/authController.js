@@ -5,7 +5,7 @@ const errorParser = require('../utils/errorParser');
 
 authController.get('/register', (req, res) => {
     //TODO replace register.view
-    res.render('user/register');
+    res.render('user/register', { title: 'Register Page'});
 });
 
 
