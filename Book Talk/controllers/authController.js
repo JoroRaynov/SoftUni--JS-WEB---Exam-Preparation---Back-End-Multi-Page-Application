@@ -13,13 +13,16 @@ authController.get('/register', (req, res) => {
 
 
 authController.post('/register', async (req, res) => {
-
+    console.log(req.body);
     try {
         if (req.body.email == '' || req.body.username == '' || req.body.password == '') {
             throw new Error('All field are required')
         }
         if (req.body.repass != req.body.password) {
             throw new Error('Passwords don\'t match')
+        }
+        if(req.body.password.length < 3 ){
+            throw new Error('Password must be at least 3 characters long')
         }
         const token = await authService.register(req.body);
         res.cookie('session', token, { httpOnly: true });

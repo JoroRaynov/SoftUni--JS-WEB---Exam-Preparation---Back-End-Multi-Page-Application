@@ -79,9 +79,19 @@ bookController.get('/:id/wish', isAuth, async (req, res) => {
 bookController.get('/:id/edit', isAuth, async (req, res) => {
     const book = await bookService.getById(true, req.params.id);
 
-    if (book.owner == req.user._id) {
+    try {
+        if (book.owner != req.user._id) {
+            throw new Error('Only the owner can edit this book');
+        }
         res.render('edit', { book })
+    } catch (error) {
+        res.render('404', {
+            errors: errorParser(error)
+        })
     }
+
+
+
 });
 
 bookController.post('/:id/edit', isAuth, async (req, res) => {
@@ -91,7 +101,7 @@ bookController.post('/:id/edit', isAuth, async (req, res) => {
         title: req.body.title,
         author: req.body.author,
         genre: req.body.genre,
-        stars: req.body.stars,
+        stars: Number(req.body.stars),
         imageUrl: req.body.imageUrl,
         bookReview: req.body.bookReview
     }
@@ -109,7 +119,7 @@ bookController.post('/:id/edit', isAuth, async (req, res) => {
         res.render('edit', {
             body: req.body,
             errors: errorParser(error)
-        })
+        });
     }
 });
 
@@ -123,7 +133,7 @@ bookController.get('/:id/delete', isAuth, async (req, res) => {
         await bookService.delete(book._id);
         res.redirect('/book/catalog');
     } catch (error) {
-        res.render('catalog', { errors: errorParser(error) });
+        res.render('404', { errors: errorParser(error) });
     }
 });
 
