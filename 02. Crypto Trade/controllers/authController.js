@@ -4,12 +4,17 @@ const errorParser = require('../utils/errorParser');
 
 
 authController.get('/register', (req, res) => {
+    if (req.user) {
+        return res.redirect('/');
+    }
     //TODO replace register.view
     res.render('user/register');
 });
 
 
 authController.post('/register', async (req, res) => {
+
+
 
     try {
         if (req.body.email == '' || req.body.username == '' || req.body.password == '') {
@@ -37,10 +42,14 @@ authController.post('/register', async (req, res) => {
 });
 
 authController.get('/login', (req, res) => {
+    if (req.user) {
+        return res.redirect('/');
+    }
     //TODO replace register.view
 
     res.render('user/login');
 });
+
 
 authController.post('/login', async (req, res) => {
     try {
@@ -52,7 +61,7 @@ authController.post('/login', async (req, res) => {
         res.redirect('/');
 
     } catch (error) {
-//TODO check the requirement and change the error
+        //TODO check the requirement and change the error
         const errors = errorParser(error);
         res.render('user/login', {
             errors,
@@ -61,6 +70,8 @@ authController.post('/login', async (req, res) => {
     }
 
 });
+
+
 
 authController.get('/logout', (req, res) => {
     res.clearCookie('session');

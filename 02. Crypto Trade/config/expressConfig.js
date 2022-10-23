@@ -5,7 +5,14 @@ const {auth} = require('../middlewares/authMiddleware');
 const {trim} = require('../middlewares/trimMiddleware');
 module.exports = (app) => {
     app.engine('hbs', hbs.engine({
-        extname: 'hbs'
+        extname: 'hbs',
+        helpers: {
+            select:  function(selected, options) {
+                return options.fn(this).replace(
+                    new RegExp(' value=\"' + selected + '\"'),
+                    '$& selected="selected"');
+            }
+        }
     }));
 
     app.use(express.urlencoded({extended: false}));
