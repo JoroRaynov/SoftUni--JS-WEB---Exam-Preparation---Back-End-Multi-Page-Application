@@ -42,7 +42,7 @@ cryptoController.get('/:coinId/edit', isAuth, async (req, res) => {
 
     const coin = await cryptoService.getCoinById(req.params.coinId).lean();
     const method = coin.paymentMethod;
-   
+
     console.log(req.user._id != coin.owner);
     try {
         if (req.user._id != coin.owner) {
@@ -132,11 +132,19 @@ cryptoController.get('/:coinId/delete', isAuth, async (req, res) => {
 });
 
 
-cryptoController.get('/edit', isAuth, (req, res) => {
-    res.render('edit')
-});
+cryptoController.get('/search', async (req, res) => {
+    const coins = await cryptoService.getAll();
 
+    res.render('search', { coins })
+})
 
+cryptoController.post('/search', async (req, res) => {
+
+    console.log(req.body);
+    const matches = await cryptoService.search(req.body.text, req.body.paymentMethod)
+    console.log(matches);
+    res.render('search', { coins: matches })
+})
 
 
 module.exports = cryptoController;
