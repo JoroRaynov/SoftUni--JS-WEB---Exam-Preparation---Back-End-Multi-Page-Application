@@ -13,7 +13,7 @@ const cryptoSchema = new mongoose.Schema({
     },
     price: { type: Number, required: true, min: [1, 'The price must be a positive number'] },
     description: { type: String, required: true, minLength: [10, 'Description must be at least 10 characters long'] },
-    paymentMethod: { type: String, required: true }, //TODO add payment methods
+    paymentMethod: { type: String, required: true, enum: ['crypto-wallet', 'credit-card', 'debit-card', 'paypal'] }, //TODO add payment methods
     buyACrypto: { type: [mongoose.Types.ObjectId], ref: 'User', default: [] },
     owner: { type: mongoose.Types.ObjectId, ref: 'User' }
 });

@@ -38,12 +38,23 @@ cryptoController.post('/create', isAuth, async (req, res) => {
 });
 
 
-cryptoController.get('/:coinId/edit', async (req, res) => {
+cryptoController.get('/:coinId/edit', isAuth, async (req, res) => {
 
     const coin = await cryptoService.getCoinById(req.params.coinId).lean();
     const method = coin.paymentMethod;
-    res.render('edit', { coin, method }
-    );
+   
+    console.log(req.user._id != coin.owner);
+    try {
+        if (req.user._id != coin.owner) {
+            throw new Error('Only the owner of the coin can edit this coin')
+        }
+        res.render('edit', { coin, method });
+    } catch (error) {
+        res.render('404', { errors: errorParser(error) })
+    }
+
+
+
 });
 
 
@@ -59,6 +70,9 @@ cryptoController.post('/:coinId/edit', async (req, res) => {
 
     console.log(req.params.coinId);
     try {
+        if (req.user._id != coin.owner) {
+            throw new Error('Only the owner of the coin can edit this coin')
+        }
         if (Object.values(edited).some(x => !x)) {
             throw new Error('All fields are required');
         }

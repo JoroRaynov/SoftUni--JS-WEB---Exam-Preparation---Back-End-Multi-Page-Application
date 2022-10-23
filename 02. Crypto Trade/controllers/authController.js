@@ -1,13 +1,12 @@
 const authController = require('express').Router();
 const authService = require('../services/authService');
 const errorParser = require('../utils/errorParser');
-
+const {isAuth} = require('../middlewares/authMiddleware');
 
 authController.get('/register', (req, res) => {
     if (req.user) {
         return res.redirect('/');
     }
-    //TODO replace register.view
     res.render('user/register');
 });
 
@@ -26,12 +25,10 @@ authController.post('/register', async (req, res) => {
         const token = await authService.register(req.body);
         res.cookie('session', token, { httpOnly: true });
 
-        //TODO redirect by requirement
 
         res.redirect('/');
 
     } catch (error) {
-        //TODO check the requirement and change the error
 
         const errors = errorParser(error);
         res.render('user/register', {
@@ -73,7 +70,7 @@ authController.post('/login', async (req, res) => {
 
 
 
-authController.get('/logout', (req, res) => {
+authController.get('/logout', isAuth, (req, res) => {
     res.clearCookie('session');
     res.redirect('/');
 });
