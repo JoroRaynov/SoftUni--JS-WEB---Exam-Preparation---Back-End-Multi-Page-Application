@@ -43,7 +43,6 @@ cryptoController.get('/:coinId/edit', isAuth, async (req, res) => {
     const coin = await cryptoService.getCoinById(req.params.coinId).lean();
     const method = coin.paymentMethod;
 
-    console.log(req.user._id != coin.owner);
     try {
         if (req.user._id != coin.owner) {
             throw new Error('Only the owner of the coin can edit this coin')
@@ -68,7 +67,6 @@ cryptoController.post('/:coinId/edit', async (req, res) => {
         paymentMethod: req.body.paymentMethod
     };
 
-    console.log(req.params.coinId);
     try {
         if (req.user._id != coin.owner) {
             throw new Error('Only the owner of the coin can edit this coin')
@@ -136,15 +134,13 @@ cryptoController.get('/search', async (req, res) => {
     const coins = await cryptoService.getAll();
 
     res.render('search', { coins })
-})
+});
 
 cryptoController.post('/search', async (req, res) => {
 
-    console.log(req.body);
-    const matches = await cryptoService.search(req.body.text, req.body.paymentMethod)
-    console.log(matches);
+    const matches = await cryptoService.search(req.body.text, req.body.paymentMethod);
     res.render('search', { coins: matches })
-})
+});
 
 
 module.exports = cryptoController;
