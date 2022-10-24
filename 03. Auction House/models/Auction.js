@@ -15,7 +15,7 @@ const auctionSchema = new mongoose.Schema({
     },
     price: { type: Number, required: true, min: [1, 'The price can not be a negative number'] },
     author: { type: mongoose.Types.ObjectId, ref: 'User' },
-    bidder: { type: [mongoose.Types.ObjectId], ref: 'User', default: [] }
+    bidder: { type: mongoose.Types.ObjectId, ref: 'User'}
 });
 
 

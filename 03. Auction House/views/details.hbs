@@ -1,113 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- Details Page -->
+<section id="catalog-section">
+    <h1 class="item">
+        {{auction.title}}
+    </h1>
+    <div class="item padded">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/site.css">
-    <title>Auction Details</title>
-</head>
+        <div class="layout right large">
 
-<body>
-
-    <div id="page-content">
-
-        <header>
-            <a href="/" class="title-logo">
-                <img src="/static/assets/logo.png">
-                <span>Auction House</span>
-            </a>
-            <nav class="main-nav nav-mid">
-                <ul>
-                    <li>
-                        <a href="#">Browse</a>
-                    </li>
-                    <!-- User actions -->
-                    <li class="user">
-                        <a href="#">Publish</a>
-                    </li>
-
-                    <!-- Bonus action --><!--
-                    <li class="user">
-                        <a href="#">Closed Auctions</a>
-                    </li>
-                    -->
-
-                    <li class="user">
-                        <a href="#">Logout</a>
-                    </li>
-                    <!-- Guest actions -->
-                    <li class="guest">
-                        <a href="#">Register</a>
-                    </li>
-                    <li class="guest">
-                        <a href="#">Login</a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
-
-        <main>
-
-            <!-- In case of error, display the following div--><!--
-
-            <div class="error-box">
-                <p>Show each error in a separate paragraph</p>
+            <div class="col">
+                <img src="{{auction.imageUrl}}" class="img-large">
             </div>
 
-            -->
-            
-            <!-- Details Page -->
-            <section id="catalog-section">
+            <div class="content pad-med">
 
-                <h1 class="item">
-                    Fishing Boat
-                </h1>
-                <div class="item padded">
+                <p>In category: <strong>{{auction.category}}</strong></p>
+                <p>{{auction.description}}</p>
 
-                    <div class="layout right large">
-
-                        <div class="col">
-                            <img src="/static/assets/boat.jpg" class="img-large">
-                        </div>
-
-                        <div class="content pad-med">
-
-                            <p>In category: <strong>Vehicles</strong></p>
-                            <p>Excellent condition. Onboard diesel motor, upholstered cockpit, fishing sonar. Includes
-                                trailer.</p>
-
-                            <div class="align-center">
-                                <div>
-                                    Current price: $<strong>5000</strong>
-                                </div>
-
-                                <!-- If current user can place a bid -->
-                                <form class="vertical" method="post" action="#">
-                                    <label><span>Bid amount</span><input type="number" name=""></label>
-                                    <input class="action" type="submit" value="Place bid">
-                                </form>
-
-                                <!-- If current user is the bidder -->
-                                <div>
-                                    You are currently the <strong>highest bidder</strong> for this auction
-                                </div>
-
-                            </div>
-
-                        </div>
+                <div class="align-center">
+                    <div>
+                        Current price: $<strong>{{auction.price}}</strong>
+                    </div>
+                    {{#if isBidder}}
+                    <!-- If current user is the bidder -->
+                    <div>
+                        You are currently the <strong>highest bidder</strong> for this auction
                     </div>
 
-                    <footer>Listed by Peter Jackson</footer>
+                    {{else}} 
+                    {{#if user}} 
+                    <!-- If current user can place a bid -->
+                        <form class="vertical" method="post">
+                            <label><span>Bid amount</span><input type="number" name="bidAmount"></label>
+                            <input class="action" type="submit" value="Place bid">
+                        </form>
+                        {{/if}} 
+                        {{/if}} 
                 </div>
 
-            </section>
+            </div>
+        </div>
 
-        </main>
+                <footer>Listed by {{auction.author.firstName}} {{auction.author.lastName}}</footer>
 
-        <footer>SoftUni &copy; 2022 | Design by Viktor Kostadinov</footer>
     </div>
-
-</body>
-
-</html>
+</section>
