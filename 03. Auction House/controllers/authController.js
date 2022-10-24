@@ -13,9 +13,11 @@ authController.get('/register', (req, res) => {
 
 
 authController.post('/register', async (req, res) => {
-    console.log(req.body);
+    if (req.user) {
+        return res.redirect('/');
+    }
     try {
-        if (req.body.email == '' || req.body.username == '' || req.body.password == '') {
+        if (req.body.email == '' || req.body.firstName == '' || req.body.lastName == ''|| req.body.password == '') {
             throw new Error('All field are required')
         }
         if (req.body.repass != req.body.password) {
@@ -24,12 +26,9 @@ authController.post('/register', async (req, res) => {
         const token = await authService.register(req.body);
         res.cookie('session', token, { httpOnly: true });
 
-        //TODO redirect by requirement
-
         res.redirect('/');
 
     } catch (error) {
-        //TODO check the requirement and change the error
 
         const errors = errorParser(error);
         res.render('user/register', {
@@ -49,6 +48,9 @@ authController.get('/login', (req, res) => {
 });
 
 authController.post('/login', async (req, res) => {
+    if (req.user) {
+        return res.redirect('/');
+    }
     try {
         if (req.body.email == '' || req.body.password == '') {
             throw new Error('All fields are required');
