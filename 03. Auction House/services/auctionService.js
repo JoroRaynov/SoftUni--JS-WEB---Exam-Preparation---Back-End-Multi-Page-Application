@@ -1,6 +1,6 @@
 const Auction = require('../models/Auction');
 
-
+exports.getAllMatches = () => Auction.find().where({closed: false}).lean();
 exports.getAll = () => Auction.find().lean();
 exports.getOne = (id) => Auction.findById(id).populate('author').populate('bidder');
 
@@ -19,5 +19,8 @@ exports.update = async (updateData, id) => {
     }
    await existed.save()
 }
-exports.delete = (id) => Auction.findByIdAndDelete(id)
+exports.delete = (id) => Auction.findByIdAndDelete(id);
+
+
+
 

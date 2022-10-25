@@ -11,6 +11,7 @@ exports.auth = (req, res, next) => {
             const userData = jwt.verify(token, SECRET);
             req.user = userData;
             res.locals.user = userData;
+            
         } catch (error) {
             res.clearCookie('session');
             res.redirect('auth/login');

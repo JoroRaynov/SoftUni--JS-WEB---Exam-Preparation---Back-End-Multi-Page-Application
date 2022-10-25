@@ -38,6 +38,7 @@ exports.login = async (email, password) => {
     return createSession(user);
 }
 
+exports.getUserClosedAuctions = (id) => User.findById(id).populate('closed');
 
 async function createSession(user) {
     const payload = {
@@ -49,3 +50,4 @@ async function createSession(user) {
     const token = jwt.sign(payload, SECRET, { expiresIn: '2h' });
     return token;
 }
+

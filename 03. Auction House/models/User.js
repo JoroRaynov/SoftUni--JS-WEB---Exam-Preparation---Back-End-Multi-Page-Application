@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true, minLength: [5, 'Password must be at least 5 characters long'] },
     firstName: { type: String, required: true, minLength: [1, 'First Name must be at least 1 characters long']},
     lastName: { type: String, required: true, minLength: [1, 'Last Name must be at least 1 characters long'] },
-    bid: {type: Number}
+    closed: {type: [mongoose.Types.ObjectId], ref: 'Auction', default: []}
 });
 
 

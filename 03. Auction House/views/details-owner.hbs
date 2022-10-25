@@ -29,13 +29,12 @@
                     <div>
                         <!-- If there is a bidder -->
                         {{#if auction.bidder}}
-                        Bid by <strong>{{auction.fullName}}</strong>
-                        <!-- # Bonus: If there is a bidder -->
-                        <!--
+                        Bid by <strong>{{auction.bidder}}</strong>
+                        
 
-                                    <a class="action pad-med cta" href="#">Close Auction</a>
+                                    <a class="action pad-med cta" href="/auction/{{auction._id}}/closed">Close Auction</a>
                                     
-                                    # End of Bonus -->
+                                
 
                         <!-- If there are no bids -->
                         {{else}}
