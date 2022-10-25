@@ -14,7 +14,7 @@ exports.auth = (req, res, next) => {
             
         } catch (error) {
             res.clearCookie('session');
-            res.redirect('auth/login');
+            res.render('user/login');
             return;
         }
 
@@ -26,7 +26,7 @@ exports.isAuth = (req, res, next) => {
     if(req.user){
         next();
     } else {
-        res.render('/auth/login');
+        res.redirect('/auth/login');
     }
 }
 

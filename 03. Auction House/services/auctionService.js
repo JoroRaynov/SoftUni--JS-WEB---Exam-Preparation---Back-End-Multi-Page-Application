@@ -8,16 +8,16 @@ exports.create = (auctionData) => Auction.create(auctionData);
 exports.update = async (updateData, id) => {
     
     const existed = await Auction.findById(id);
-    console.log(existed);
+    // console.log(existed);
     existed.title = updateData.title,
     existed.description = updateData.description,
     existed.category = updateData.category,
     existed.imageUrl = updateData.imageUrl
-
+    console.log(updateData.price)
     if(updateData.price) {
         existed.price = updateData.price
     }
-   await existed.save()
+   await existed.save();
 }
 exports.delete = (id) => Auction.findByIdAndDelete(id);
 

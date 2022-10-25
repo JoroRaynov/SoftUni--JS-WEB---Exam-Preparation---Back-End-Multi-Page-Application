@@ -27,11 +27,15 @@
                     <span>Image URL</span>
                     <input type="text" name="imageUrl" value="{{auction.imageUrl}}">
                 </label>
-                    {{#if auction.bidder}}
                 <label>
+                    {{#if auction.bidder}}
                     <span>Starting price</span>
                     <!-- If the current auction has a bidder, this input field should be disabled -->
-                    <input type="number" name="price" value="auction.price" disabled>
+                    <input type="number" name="price" value="{{auction.price}}" disabled>
+                    {{else}}
+                    <span>Starting price</span>
+                    <input type="number" name="price" value="{{auction.price}}">
+
                 </label>
                     {{/if}}
             </div>

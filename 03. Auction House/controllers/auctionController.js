@@ -53,12 +53,8 @@ auctionController.get('/:auctionId/details', async (req, res) => {
             throw new Error('The auction was not found');
         }
         if (isAuthor) {
-            // if (auction.bidder) {
 
-                // auction.fullName = auction.bidder.firstName + ' ' + auction.bidder.lastName;
-            // }
-
-            return res.render('details-owner', { auction})
+            return res.render('details-owner', { auction })
         }
         res.render('details', { auction, isBidder, isAuthor });
 
@@ -94,11 +90,13 @@ auctionController.post('/:auctionId/details', isAuth, async (req, res) => {
 
 auctionController.get('/:auctionId/edit', isAuth, async (req, res) => {
     const auction = await auctionService.getOne(req.params.auctionId).lean();
+    console.log(auction)
     res.render('edit', { auction })
 });
 
 auctionController.post('/:auctionId/edit', isAuth, async (req, res) => {
     const auction = await auctionService.getOne(req.params.auctionId).lean();
+    // console.log(req.body)
     const updated = {
         title: req.body.title,
         category: req.body.category,
@@ -108,15 +106,20 @@ auctionController.post('/:auctionId/edit', isAuth, async (req, res) => {
     if (!auction.bidder) {
         updated.price = req.body.price;
     }
+    // console.log(Object.values(updated))
+    console.log(updated)
 
     try {
         if (Object.values(updated).some(a => !a)) {
-            throw new Error('All fields are required');
+            throw new Error('All ggg fields are required');
         }
         await auctionService.update(updated, req.params.auctionId);
         res.redirect(`/auction/${req.params.auctionId}/details`)
     } catch (error) {
-        res.render('edit', { errors: errorParser(error, auction) })
+        res.render('edit', {
+            auction,
+            errors: errorParser(error, auction)
+        })
     }
 
 });
@@ -141,15 +144,15 @@ auctionController.get(`/:auctionId/closed`, isAuth, async (req, res) => {
     const auction = await auctionService.getOne(req.params.auctionId);
     auction.closed = true;
     user.closed.push(auction._id);
-    
+
     await auction.save();
     await user.save();
     res.redirect(`/auction/user/${req.user._id}/closed`);
 });
 
-auctionController.get(`/user/:userId/closed`,async (req, res)=> {
+auctionController.get(`/user/:userId/closed`, async (req, res) => {
     const closedAuctions = await authService.getUserClosedAuctions(req.user._id).lean();
-    res.render('closed-auctions', {auctions: closedAuctions.closed});
+    res.render('closed-auctions', { auctions: closedAuctions.closed });
 });
 
 module.exports = auctionController;
