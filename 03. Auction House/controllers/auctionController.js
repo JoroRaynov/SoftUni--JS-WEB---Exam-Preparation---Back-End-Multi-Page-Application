@@ -4,14 +4,12 @@ const { isAuth } = require('../middlewares/authMiddleware');
 const errorParser = require('../utils/errorParser');
 const authService = require('../services/authService');
 
-const closedAuctions = [];
 auctionController.get('/create', isAuth, (req, res) => {
     res.render('create');
 });
 
 auctionController.post('/create', isAuth, async (req, res) => {
 
-    // console.log(req.body);
     const newAuction = {
         title: req.body.title,
         category: req.body.category,
@@ -39,9 +37,7 @@ auctionController.post('/create', isAuth, async (req, res) => {
 
 auctionController.get('/browse', async (req, res) => {
     const auctions = await auctionService.getAllMatches();
-console.log(auctions);
 
-//    console.log(toRender);
     res.render('browse', { auctions });
 });
 
@@ -148,21 +144,12 @@ auctionController.get(`/:auctionId/closed`, isAuth, async (req, res) => {
     
     await auction.save();
     await user.save();
-    // await auctionService.delete(req.params.auctionId);
     res.redirect(`/auction/user/${req.user._id}/closed`);
 });
 
 auctionController.get(`/user/:userId/closed`,async (req, res)=> {
     const closedAuctions = await authService.getUserClosedAuctions(req.user._id).lean();
-    console.log(closedAuctions.closed.bidder)
     res.render('closed-auctions', {auctions: closedAuctions.closed});
-})
+});
 
-// auctionController.post(`/:userId/closed`, isAuth, async (req, res) => {
-//     console.log(req.params.userId);
-//     const user = await authService.getUserById(req.user._id);
-//     user.closed.push(req.user._id);
-//     await user.save();
-//     res.redirect(`/auction/${req.user._id}/closed`);
-// });
 module.exports = auctionController;
