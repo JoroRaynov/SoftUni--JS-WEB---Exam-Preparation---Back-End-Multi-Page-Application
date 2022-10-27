@@ -21,6 +21,7 @@ exports.register = async ({ email, password, skills }) => {
 
 }
 
+exports.getOneById = (id) => User.findById(id);
 
 exports.login = async (email, password) => {
     const user = await User.findOne({ email }); //.collation({locale: 'en', strength: 2}) <-- if email is unique

@@ -13,7 +13,7 @@ exports.auth = (req, res, next) => {
             res.locals.user = userData;
         } catch (error) {
             res.clearCookie('session');
-            res.redirect('auth/login');
+            res.redirect('/auth/login');
             return;
         }
 

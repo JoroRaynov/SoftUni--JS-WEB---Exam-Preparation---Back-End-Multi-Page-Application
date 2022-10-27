@@ -14,14 +14,14 @@
     <div class="box">
 
         <!-- In case of error, you should display div with class "error-box" -->
-    <!-- You can choose to display the first error or all of them (error message/s in your opinion) -->
+        <!-- You can choose to display the first error or all of them (error message/s in your opinion) -->
         {{#if errors}}
-       <div class="error-box">
-        {{#each errors}}
+        <div class="error-box">
+            {{#each errors}}
             <p>{{this}}</p>
             {{/each}}
         </div>
-{{/if}}
+        {{/if}}
         <header class="header">
             <article class="header-logo">
                 <!-- Do not forget to change the path to the image -->
@@ -40,7 +40,7 @@
                     <!-- Logged users -->
                     {{#if user}}
                     <li class="header-nav-list-item">
-                        <a href="#" class="header-nav-list-item-link">Create Ad</a>
+                        <a href="/ads/create" class="header-nav-list-item-link">Create Ad</a>
                     </li>
                     <li class="header-nav-list-item">
                         <a href="#" class="header-nav-list-item-link">Search</a>
