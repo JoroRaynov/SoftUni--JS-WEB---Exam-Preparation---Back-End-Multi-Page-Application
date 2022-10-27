@@ -86,7 +86,7 @@ adsController.get('/:adId/edit', isAuth, async (req, res) => {
     } catch (error) {
         res.redirect('/');
     }
-    
+
 });
 
 
@@ -101,7 +101,7 @@ adsController.post('/:adId/edit', isAuth, async (req, res) => {
     }
 
     try {
-        
+
         if (Object.values(updated).some(u => !u)) {
             throw new Error('All fields are required')
         }
@@ -117,11 +117,18 @@ adsController.post('/:adId/edit', isAuth, async (req, res) => {
 });
 
 adsController.get('/search', isAuth, (req, res) => {
-    res.render('search')
+    
+    res.render('search', {search: false})
 })
 
-adsController.post('/search', isAuth, (req, res) => {
-    console.log(req.body)
-    res.end()
+adsController.post('/search', isAuth, async (req, res) => {
+    // const match = await adsService.search(req.body.email);
+    const emailMatch = await adsService.getUserByEmail(req.body.email);
+    console.log(emailMatch)
+if(emailMatch){
+    res.render('search', { emailMatch, search: true })
+} else {
+    res.render('search')
+}
 })
 module.exports = adsController;
