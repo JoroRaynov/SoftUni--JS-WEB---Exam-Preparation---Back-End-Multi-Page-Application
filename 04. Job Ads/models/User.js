@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
      },
     password: { type: String, required: true},
     skills: { type: String, required: true, maxLength: [40, 'Description of skills must be maximum 40 characters long']},
-    myAds: {type: [mongoose.Types.ObjectId], ref: 'AdModel', default: []}
+    myAds: {type: [mongoose.Types.ObjectId], ref: 'Ad'}
 });
 
 

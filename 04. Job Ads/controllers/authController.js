@@ -77,4 +77,6 @@ authController.get('/logout', isAuth ,(req, res) => {
     res.redirect('/');
 });
 
+
+
 module.exports = authController;

@@ -22,7 +22,7 @@ exports.register = async ({ email, password, skills }) => {
 }
 
 exports.getOneById = (id) => User.findById(id);
-
+exports.getOneByIdInfo = (id) => User.findById(id).populate('myAds').lean();
 exports.login = async (email, password) => {
     const user = await User.findOne({ email }); //.collation({locale: 'en', strength: 2}) <-- if email is unique
 
@@ -48,3 +48,5 @@ async function createSession(user) {
     const token = jwt.sign(payload, SECRET, { expiresIn: '2h' });
     return token;
 }
+
+exports.getUserByEmail = (email) => User.find({email}).lean();

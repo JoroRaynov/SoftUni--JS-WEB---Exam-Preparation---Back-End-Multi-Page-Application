@@ -52,7 +52,7 @@ adsController.get('/:adId/apply', isAuth, async (req, res) => {
         }
         ad.usersApplied.push(req.user._id);
         await ad.save();
-
+        res.redirect(`/ads/${req.params.adId}/details`)
     } catch (error) {
         res.render('details', {
             errors: errorParser(error),
@@ -123,10 +123,11 @@ adsController.get('/search', isAuth, (req, res) => {
 
 adsController.post('/search', isAuth, async (req, res) => {
     // const match = await adsService.search(req.body.email);
-    const emailMatch = await adsService.getUserByEmail(req.body.email);
-    console.log(emailMatch)
+    const emailMatch = await authService.getUserByEmail(req.body.email);
+    const user = await authService.getOneByIdInfo(emailMatch[0]._id);
+    console.log(user.myAds)
 if(emailMatch){
-    res.render('search', { emailMatch, search: true })
+    res.render('search', { userMatch: user.myAds, search: true })
 } else {
     res.render('search')
 }

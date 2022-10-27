@@ -9,13 +9,13 @@
         </button>
     </form>
     {{#if search}}
-    {{#if emailMatch}}
+    {{#if userMatch}}
     <section id="search-page">
 
         <h2>Search result:</h2>
         <!--If there are a search matches, show each ad-->
 
-        {{#each emailMatch}}
+        {{#each userMatch}}
         <article class="search-page-result">
             <p class="search-page-result-headline">Headline: {{headline}}</p>
             <p class="search-page-result-companyName">Company Name: {{companyName}}</p>
@@ -29,6 +29,6 @@
     </section>
     {{/if}}
     {{/if}}
-    
+
 
 </main>

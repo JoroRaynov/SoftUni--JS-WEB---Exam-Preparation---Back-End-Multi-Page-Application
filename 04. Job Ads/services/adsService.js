@@ -17,4 +17,4 @@ exports.update = async (ad, updateData) => {
 };
 
 // exports.search = (search) => AdModel.find({author: }).lean();
-exports.getUserByEmail = (email) => AdModel.find({email}).lean();
+exports.getUserByEmail = (email) => AdModel.find({email}).populate('myAds').lean();

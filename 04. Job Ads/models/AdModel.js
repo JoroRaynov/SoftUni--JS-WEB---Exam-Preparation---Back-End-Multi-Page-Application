@@ -7,7 +7,7 @@ const adSchema = new mongoose.Schema({
     companyName: {type: String, required: true, minLength: [3, 'Company Name must be at least 3 characters long']},
     description: {type: String, required: true, maxLength: [40, 'Description must be at least 40 characters long']},
     author: {type: mongoose.Types.ObjectId, ref: 'User'},
-    usersApplied: {type: [mongoose.Types.ObjectId], ref: 'User', default: []}
+    usersApplied: {type: [mongoose.Types.ObjectId], ref: 'User'}
 });
 
 
