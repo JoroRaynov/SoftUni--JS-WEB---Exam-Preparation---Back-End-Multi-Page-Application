@@ -26,8 +26,9 @@
         <!-- Do not forget to change the path to the image -->
         <img src="/static/img/strip-square.png" alt="strip-square">
     </article>
-    {{#if ads}}
-    {{#each ads}}
+    <article class="intro-right-side">
+    {{#if firstThree}}
+    {{#each firstThree}}
     <article class="intro-right-side-content">
         <!-- Do not forget to change the path to the image -->
         <img src="/static/img/technology.png" alt="technology">
@@ -35,14 +36,16 @@
             <!--Put the value of the headline below-->
             {{headline}}
             <!--Put the value of the total number of candidates below-->
-            <span>Candidates: 2</span>
+            <span>Candidates: {{usersApplied.length}}</span>
         </h5>
     </article>
+    
     {{/each}}
     {{else}}
     <p class="no-ads-created">No ads created!</p>
 
     {{/if}}
+    </article>
 
 
 
