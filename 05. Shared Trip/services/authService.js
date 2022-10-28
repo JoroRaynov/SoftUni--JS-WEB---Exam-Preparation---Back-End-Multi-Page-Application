@@ -18,7 +18,6 @@ exports.register = async ({ email, password, gender }) => {
         gender
     });
     return createSession(user);
-
 }
 
 
@@ -47,3 +46,5 @@ async function createSession(user) {
     const token = jwt.sign(payload, SECRET, { expiresIn: '2h' });
     return token;
 }
+
+exports.getUserById = (id) => User.findById(id);

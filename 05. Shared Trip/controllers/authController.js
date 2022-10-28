@@ -1,7 +1,7 @@
 const authController = require('express').Router();
 const authService = require('../services/authService');
 const errorParser = require('../utils/errorParser');
-
+const {isAuth} = require('../middlewares/authMiddleware')
 
 authController.get('/register', (req, res) => {
     if (req.user) {
@@ -75,7 +75,7 @@ authController.post('/login', async (req, res) => {
 
 });
 
-authController.get('/logout', (req, res) => {
+authController.get('/logout', isAuth, (req, res) => {
     res.clearCookie('session');
     res.redirect('/');
 });
