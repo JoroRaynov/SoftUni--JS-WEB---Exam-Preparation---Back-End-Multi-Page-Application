@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv'); 
 //TODO change db name 
-
-const connectionString = 'mongodb://localhost:27017/shared-trip';
+dotenv.config();
+// const connectionString = 'mongodb://localhost:27017/shared-trip';
 module.exports = async (app) => {
     try {
-        await mongoose.connect(connectionString, {
+        await mongoose.connect(process.env.MONGO_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
